@@ -48,9 +48,9 @@ public class TemperatureSeriesAnalysis {
      */
     public double deviation() {
         int dev = 0;
-        final double Avg = this.average();
+        final double AVG = this.average();
         for (double t : temperatures) {
-            dev += (t - Avg) * (t - Avg);
+            dev += (t - AVG) * (t - AVG);
         }
         return Math.sqrt(dev / temperatures.length);
     }
