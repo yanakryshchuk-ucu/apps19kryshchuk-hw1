@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
-    private double[] temperatures;
     private static final int ZERO = -273;
+    private double[] temperatures;
 
 
     public TemperatureSeriesAnalysis() {
@@ -13,8 +13,9 @@ public class TemperatureSeriesAnalysis {
     }
 
     public TemperatureSeriesAnalysis(double[] temperatures) {
-        if (temperatures == null || temperatures.length == 0)
+        if (temperatures == null || temperatures.length == 0) {
             throw new IllegalArgumentException("Array is empty.");
+        }
         for (int i = 0; i < temperatures.length; i++) {
             if (temperatures[i] < ZERO) {
                 throw new InputMismatchException();
@@ -47,9 +48,9 @@ public class TemperatureSeriesAnalysis {
      */
     public double deviation() {
         int dev = 0;
-        final double avg = this.average();
+        final double Avg = this.average();
         for (double t : temperatures) {
-            dev += (t - avg) * (t - avg);
+            dev += (t - Avg) * (t - Avg);
         }
         return Math.sqrt(dev / temperatures.length);
     }
