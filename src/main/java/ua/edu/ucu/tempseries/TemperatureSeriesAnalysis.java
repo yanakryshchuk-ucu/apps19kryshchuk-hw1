@@ -1,12 +1,11 @@
 package ua.edu.ucu.tempseries;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
     private double[] temperatures;
+    private static final int ZERO = -273;
 
 
     public TemperatureSeriesAnalysis() {
@@ -14,14 +13,14 @@ public class TemperatureSeriesAnalysis {
     }
 
     public TemperatureSeriesAnalysis(double[] temperatures) {
-        if ( temperatures == null || temperatures.length == 0 )
+        if (temperatures == null || temperatures.length == 0)
             throw new IllegalArgumentException("Array is empty.");
         for (int i = 0; i < temperatures.length; i++) {
-            if (temperatures[i] < -273) {
+            if (temperatures[i] < ZERO) {
                 throw new InputMismatchException();
             }
         }
-        this.temperatures = Arrays.copyOf(temperatures,temperatures.length);
+        this.temperatures = Arrays.copyOf(temperatures, temperatures.length);
     }
 
     /**
@@ -32,7 +31,7 @@ public class TemperatureSeriesAnalysis {
      */
     public double average() {
         double sum = 0;
-        for ( double t : temperatures) {
+        for (double t : temperatures) {
             sum += t;
         }
         double average = sum / temperatures.length;
@@ -50,7 +49,7 @@ public class TemperatureSeriesAnalysis {
         int dev = 0;
         final double avg = this.average();
         for (double t : temperatures) {
-            dev += Math.pow(t - avg, 2);
+            dev += (t - avg) * (t - avg);
         }
         return Math.sqrt(dev / temperatures.length);
     }
@@ -98,8 +97,8 @@ public class TemperatureSeriesAnalysis {
     }
 
     /**
-     * Return temperature closest to the value. Generate IllegalArgumentException
-     * if the row is empty.
+     * Return temperature closest to the value.
+     * Generate IllegalArgumentException if the row is empty.
      *
      * @return temperature closest to value.
      */
@@ -108,7 +107,7 @@ public class TemperatureSeriesAnalysis {
         double ct = 0;
         for (double t : temperatures) {
             double d = Math.abs(t - tempValue);
-            if (d<del) {
+            if (d < del) {
                 del = d;
                 ct = t;
             }
@@ -117,32 +116,32 @@ public class TemperatureSeriesAnalysis {
     }
 
     /**
-     * Return array with temperatures less than value. Generate IllegalArgumentException
-     * if the row is empty.
+     * Return array with temperatures less than value.
+     * Generate IllegalArgumentException if the row is empty.
      *
      * @return an array with numbers less than value.
      */
     public double[] findTempsLessThen(double tempValue) {
-        double[] buff = Arrays.copyOf(temperatures,temperatures.length);
+        double[] buff = Arrays.copyOf(temperatures, temperatures.length);
         Arrays.sort(buff);
         int maxIdx = 0;
-        while ( maxIdx<buff.length && buff[maxIdx]<tempValue) {
+        while (maxIdx < buff.length && buff[maxIdx] < tempValue) {
             maxIdx++;
         }
         return Arrays.copyOf(buff, maxIdx);
     }
 
     /**
-     * Return array with temperatures greater or equal to the value. Generate IllegalArgumentException
-     * if the row is empty.
+     * Return array with temperatures greater or equal to the value.
+     * Generate IllegalArgumentException if the row is empty.
      *
      * @return an array with numbers greater or equal to the value.
      */
     public double[] findTempsGreaterThen(double tempValue) {
-        double[] buff = Arrays.copyOf(temperatures,temperatures.length);
+        double[] buff = Arrays.copyOf(temperatures, temperatures.length);
         Arrays.sort(buff);
         int minIdx = buff.length;
-        while ( minIdx>0 && buff[minIdx-1]>=tempValue) {
+        while (minIdx > 0 && buff[minIdx - 1] >= tempValue) {
             minIdx--;
         }
         return Arrays.copyOfRange(buff, minIdx, buff.length);
@@ -159,15 +158,15 @@ public class TemperatureSeriesAnalysis {
      * @return an array with numbers less than value.
      */
     public TempSummaryStatistics summaryStatistics() {
-       return new TempSummaryStatistics(average(), deviation(), min(), max());
+        return new TempSummaryStatistics(average(), deviation(), min(), max());
     }
 
 
     public int addTemps(double... temps) {
         int newLen = temperatures.length + temps.length;
         double[] newarr = new double[newLen];
-        System.arraycopy(temperatures,0, newarr, 0, temperatures.length);
-        System.arraycopy(temps,0,newarr,temperatures.length,temps.length);
+        System.arraycopy(temperatures, 0, newarr, 0, temperatures.length);
+        System.arraycopy(temps, 0, newarr, temperatures.length, temps.length);
         temperatures = newarr;
         return temperatures.length;
     }
